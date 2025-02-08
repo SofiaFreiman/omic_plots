@@ -39,7 +39,7 @@ def pseudotime_gene_expression(adata, gene_list, pseudotime_col='dpt_pseudotime'
     df_grouped = df.groupby('time_bin', observed = False).median()
     
     # Apply smoothing if specified
-    if smoothing is not None:
+    if smoothing not in [None, 0]:
         for gene in gene_list:
             df_grouped[gene] = df_grouped[gene].interpolate(method='linear', limit_area='inside')
             df_grouped[gene] = df_grouped[gene].rolling(smoothing, center=True).mean().bfill().ffill()

@@ -2,7 +2,7 @@ import pandas
 import numpy
 import matplotlib
 
-def pseudotime_gene_expression(adata, gene_list, pseudotime_col='dpt_pseudotime', pseudotime_bins=None, smoothing=None, vmax_ls=None, **kwargs):
+def pseudotime_gene_expression(adata, gene_list, pseudotime_col='dpt_pseudotime', pseudotime_bins=None, smoothing=None, vmax_ls=None, zero_min=True, **kwargs):
     """
     Plots gene expression heatmaps along pseudotime.
 
@@ -13,6 +13,7 @@ def pseudotime_gene_expression(adata, gene_list, pseudotime_col='dpt_pseudotime'
     - pseudotime_bins: Number of bins for pseudotime discretization. If None, defaults to len(adata) // 20.
     - smoothing: Rolling window size for smoothing. If None, raw gene expression per bin is plotted.
     - vmax_ls: Optional list of vmax values for each gene plot. If None, calculated as the 95th percentile of expression.
+    - zero_min: If True, vmin=0. If False, vmin is set at 0.05 quantille of the gene expression.
     - kwargs: Additional keyword arguments for customizing internal axes properties.
     """
 
@@ -62,7 +63,7 @@ def pseudotime_gene_expression(adata, gene_list, pseudotime_col='dpt_pseudotime'
         
         # Determine vmax for color scaling
         vmax = vmax_ls[n] if vmax_ls else df_grouped[gene].quantile(0.95)
-        vmin = 0
+        vmin = 0 if zero_min else df_grouped[gene].quantile(0.05)
         
         # Plot heatmap
         axs[n].imshow(

@@ -8,7 +8,7 @@ import matplotlib.cm as cm
 from pandas.api.types import CategoricalDtype
 
 
-def cell_along_trj(
+def cells_along_trj(
     adata: AnnData,
     cell_color_dict: dict = None,
     anno_col: str = "cell_type",

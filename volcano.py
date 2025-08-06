@@ -126,3 +126,7 @@ def volcano(
                          gene,
                          fontsize=gene_fontsize, weight='bold', ha=ha)
             )
+    if texts:
+        adjust_text(texts, arrowprops=dict(arrowstyle="-", color=linecolor, lw=0.6))
+
+    plt.tight_layout()

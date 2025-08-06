@@ -43,6 +43,7 @@ def volcano(
     too_crowded: bool = False,
     color_left: str = 'royalblue',
     color_right: str = 'orangered',
+    grid: bool = False
 ) -> None:
     """
     Create a volcano plot from a dataframe with 'pvals_adj' and 'logfoldchanges'.
@@ -93,7 +94,7 @@ def volcano(
     ax.set_xlabel("log(Fold Change)", fontsize=14)
     ax.set_ylabel(log_label, fontsize=14)
     ax.tick_params(labelsize=10)
-    ax.grid(False)
+    ax.grid(grid)
     if xlim:
         ax.set_xlim(-xlim, xlim)
     if ylim:

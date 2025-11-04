@@ -39,7 +39,7 @@ def pseudotime_gene_expression(adata, gene_list, pseudotime_col='dpt_pseudotime'
     if sparse.issparse(x):
         x = x.toarray().ravel()
     else:
-        x = np.array(x).ravel()
+        x = numpy.array(x).ravel()
     df[gene] = x
     del x
     

@@ -1,6 +1,7 @@
 import pandas
 import numpy
 import matplotlib
+from scipy import sparse
 
 def pseudotime_gene_expression(adata, gene_list, pseudotime_col='dpt_pseudotime', pseudotime_bins=None, smoothing=None, vmax_ls=None, zero_min=True, **kwargs):
     """
@@ -34,7 +35,13 @@ def pseudotime_gene_expression(adata, gene_list, pseudotime_col='dpt_pseudotime'
     
     # Extract and process gene expression data
     for gene in gene_list:
-        df[gene] = adata[:, gene].X.A[:, 0]  # Extract expression values
+        x = adata[:, gene].X
+    if sparse.issparse(x):
+        x = x.toarray().ravel()
+    else:
+        x = np.array(x).ravel()
+    df[gene] = x
+    del x
     
     # Compute median expression within each pseudotime bin
     df_grouped = df.groupby('time_bin', observed = False).median()

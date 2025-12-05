@@ -30,7 +30,6 @@ def volcano(
     text_fc_cut: float = 1,
     pval_cut: float = 0.05,
     fc_cut: float = 0.1,
-    log_method: str = "log10",
     title: str = "Volcano Plot",
     xlim: Optional[float] = None,
     ylim: Optional[float] = None,
@@ -43,7 +42,7 @@ def volcano(
     too_crowded: bool = False,
     color_left: str = 'royalblue',
     color_right: str = 'orangered',
-    grid: bool = False
+    grid: bool = False,
 ) -> None:
     """
     Create a volcano plot from a dataframe with 'pvals_adj' and 'logfoldchanges'.
@@ -51,17 +50,7 @@ def volcano(
 
     df = df.copy()
 
-    # Set log function and y-axis label
-    if log_method == "natural":
-        log_func = np.log
-        log_label = "-ln(p-value)"
-    elif log_method == "log10":
-        log_func = np.log10
-        log_label = "-log10(p-value)"
-    else:
-        raise ValueError("log_method must be either 'natural' or 'log10'")
-
-    df['-logP'] = -log_func(df['pvals_adj'])
+    df['-logP'] = -np.log10(df['pvals_adj'])
 
     # Replace inf values in -logP
     inf_mask = np.isinf(df['-logP'])
@@ -91,8 +80,8 @@ def volcano(
 
     # Style
     ax.set_title(title, fontsize=16)
-    ax.set_xlabel("log(Fold Change)", fontsize=14)
-    ax.set_ylabel(log_label, fontsize=14)
+    ax.set_xlabel(r"log$_2$(Fold Change)", fontsize=14)
+    ax.set_ylabel(r"$-\log_{10}(\mathrm{p\text{-}value})$", fontsize=14)
     ax.tick_params(labelsize=10)
     ax.grid(grid)
     if xlim:
